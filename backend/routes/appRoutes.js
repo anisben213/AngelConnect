@@ -7,11 +7,11 @@ router.get("/");
 
 router.post("/register");
 
-router.get("/register",registerInvestorController)
+
 
 router.post("/login");
 
-router.get("/investor/:id");
+
 
 router.get("investor/:id/startups");
 

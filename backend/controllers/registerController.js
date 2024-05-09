@@ -18,9 +18,7 @@ exports.registerInvestorController = async (req, res) => {
       });
     }
     const hashPassword = await bcrypt.hash(password, 10);
-    const token = JWT.sign({ lastName, firstName }, process.env.JWT_SECRET, {
-      expiresIn: 100000,
-    });
+
     const newInvestor = new Investor({
       firstName,
       lastName,
@@ -30,7 +28,10 @@ exports.registerInvestorController = async (req, res) => {
       company,
     });
     const savedInvestor = await newInvestor.save();
-    res.status(200).json({
+    const token = JWT.sign({ _id: savedInvestor._id }, process.env.JWT_SECRET, {
+      expiresIn: 100000,
+    });
+    res.status(201).json({
       token: token,
       message: "investor registered successfully",
       investor: savedInvestor,
@@ -45,38 +46,73 @@ exports.registerInvestorController = async (req, res) => {
 };
 
 exports.registerStartupController = async (req, res) => {
-  const { firstName, lastName, phone, email, password, startup, category } =
-    req.body;
-  const newStartup = new Startup({
-    firstName,
-    lastName,
-    email,
-    password,
-    phone,
-    startup,
-    category,
-  });
-  await newStartup.save();
-};
+  try {
+    const { firstName, lastName, phone, email, password, startup, category } =
+      req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+      });
+    }
+    const hashPassword = await bcrypt.hash(password, 10);
 
-exports.loginInvestor = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await Investor.findOne({ email: email });
-  if (!user) {
-    return res.status(400).json({
-      message: " incorrect informations, please enter a valid credentials",
+    const newStartup = new Startup({
+      firstName,
+      lastName,
+      email,
+      password: hashPassword,
+      phone,
+      startup,
+      category,
+    });
+    const savedStartup = await newStartup.save();
+    const token = JWT.sign({ _id: savedStartup._id }, process.env.JWT_SECRET, {
+      expiresIn: 100000,
+    });
+    res.status(201).json({
+      token: token,
+      message: "startup owner registered successfully",
+      investor: savedStartup,
+    });
+  } catch (error) {
+    console.error("Error registering startupper:", error);
+    res.status(500).json({
+      message: "Error registering startupper",
+      error: error.message,
     });
   }
-  console.log("Entered password:", password);
-console.log("Stored hashed password:", user.password);
+};
+
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+  let user = await StartupOwner.findOne({ email });
+
+  if (!user) {
+    user = await BusinessAngel.findOne({ email });
+  }
+
+  if (!user) {
+    return res
+      .status(404)
+      .json({ message: "no users were found with this email" });
+  }
+
   const isMatch = await bcrypt.compare(password, user.password);
-  console.log("Password match:", isMatch);
+
   if (!isMatch) {
     return res.status(400).json({
       message: "incorrect password",
     });
   }
-  res.json({
-    message : "logged in done"
-  })
+  const token = JWT.sign({ _id: savedStartup._id }, process.env.JWT_SECRET, {
+    expiresIn: 100000,
+  });
+
+  res.status(200).json({
+    message: "user logged in successfully",
+    user : user,
+    token : token
+  });
+
 };
