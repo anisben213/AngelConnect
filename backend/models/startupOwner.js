@@ -7,7 +7,8 @@ const startupSchema = new mongoose.Schema({
   password: { type: String, required: true, unique: true },
   phone: { type: Number, required: true, unique: true },
   startup: { type: String },
-  category : {type: String, required : true}
+  category : {type: String, required : true},
+  type: { type: String, enum: ['investor'], required: true }
 });
 
 const Startup = mongoose.model("startupOwner", startupSchema);

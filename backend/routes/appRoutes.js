@@ -1,20 +1,18 @@
 const express = require("express");
 const router = express.Router();
-
-const {registerStartupController,registerInvestorController} = require("../controllers/registerController")
+const userController = require("../controllers/appController");
+const { verifyToken } = require("../middlewares/verify");
 
 router.get("/");
 
-router.post("/register");
+router.get("investor/:id/startups", verifyToken, userController.getInvestors);
 
+router.get("startup/:id/investors", verifyToken, userController.getStartuppers);
 
+router.get("user/:userId", verifyToken, userController.getUserDetails);
 
-router.post("/login");
+router.get("user/profile/:userId", verifyToken, userController.updateProfile);
 
+router.post("user/profile/:userId", verifyToken, userController.updateProfile);
 
-
-router.get("investor/:id/startups");
-
-router.get("/startup/:id");
-
-router.get("/startup/:id/findInvestor");
+module.exports = router;

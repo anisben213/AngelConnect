@@ -26,6 +26,7 @@ exports.registerInvestorController = async (req, res) => {
       password: hashPassword,
       phone,
       company,
+      type: 'investor'
     });
     const savedInvestor = await newInvestor.save();
     const token = JWT.sign({ _id: savedInvestor._id }, process.env.JWT_SECRET, {
@@ -65,6 +66,7 @@ exports.registerStartupController = async (req, res) => {
       phone,
       startup,
       category,
+      type: 'startupper'
     });
     const savedStartup = await newStartup.save();
     const token = JWT.sign({ _id: savedStartup._id }, process.env.JWT_SECRET, {
@@ -73,7 +75,7 @@ exports.registerStartupController = async (req, res) => {
     res.status(201).json({
       token: token,
       message: "startup owner registered successfully",
-      investor: savedStartup,
+      startup: savedStartup,
     });
   } catch (error) {
     console.error("Error registering startupper:", error);
@@ -86,11 +88,8 @@ exports.registerStartupController = async (req, res) => {
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  let user = await StartupOwner.findOne({ email });
-
-  if (!user) {
-    user = await BusinessAngel.findOne({ email });
-  }
+  try {
+    const user = await Investor.findOne({ email }) || await StartupOwner.findOne({ email });
 
   if (!user) {
     return res
@@ -105,7 +104,7 @@ exports.login = async (req, res) => {
       message: "incorrect password",
     });
   }
-  const token = JWT.sign({ _id: savedStartup._id }, process.env.JWT_SECRET, {
+  const token = JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
     expiresIn: 100000,
   });
 
@@ -114,5 +113,9 @@ exports.login = async (req, res) => {
     user : user,
     token : token
   });
-
+  } catch (error) {
+    console.error("Error logging in user:", error);
+    res.status(500).json({ message: "Error logging in user", error: error.message });
+  }
+  
 };

@@ -7,6 +7,7 @@ const investorSchema = new mongoose.Schema({
   password: { type: String, required: true, unique: true },
   phone: { type: Number, required: true, unique: true },
   company: { type: String },
+  type: { type: String, enum: ['investor'], required: true }
 });
 
 const Investor = mongoose.model("investor", investorSchema);

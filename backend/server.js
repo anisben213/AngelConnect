@@ -2,11 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
-const router = require("./routes/registerRoutes")
-
+const signRoutes = require("./routes/registerRoutes");
+const userRoutes = require("./routes/appRoutes");
 
 app.use(express.json());
-app.use("/",router)
+app.use("api/register", signRoutes);
+app.use("api/investors", userRoutes);
 
 const URI = process.env.URI;
 mongoose
