@@ -1,0 +1,28 @@
+:root {
+  --primary-color: #f7f7f2;       
+  --secondary-color: #222725;    
+  --accent-color: #899878;       
+  --highlight-color: #e4e6c3;     
+  --title-font-size: 2rem;
+  --subtitle-font-size: 1.5rem;
+  --paragraph-font-size: 1rem;
+  --button-font-size: 1.5rem;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--secondary-color);
+  font-size: var(--paragraph-font-size);
+}
+
+h1 {
+  font-size: var(--title-font-size);
+}
+
+h2 {
+  font-size: var(--subtitle-font-size);
+}
+
+button {
+  font-size: var(--button-font-size);
+}

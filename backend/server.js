@@ -4,10 +4,12 @@ const mongoose = require("mongoose");
 const app = express();
 const signRoutes = require("./routes/registerRoutes");
 const userRoutes = require("./routes/appRoutes");
+const cors = require('cors')
 
 app.use(express.json());
-app.use("api/register", signRoutes);
-app.use("api/investors", userRoutes);
+app.use(cors({ origin: 'http://localhost:3000'}));
+app.use("/api", signRoutes);
+app.use("api/user", userRoutes);
 
 const URI = process.env.URI;
 mongoose

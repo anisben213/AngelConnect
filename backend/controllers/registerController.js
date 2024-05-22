@@ -9,10 +9,15 @@ const { validationResult } = require("express-validator");
 const Investor = require("../models/businessAngel");
 
 exports.registerInvestorController = async (req, res) => {
+  const { firstName, lastName, phone, email, password, company } = req.body;
   try {
-    const { firstName, lastName, phone, email, password, company } = req.body;
+    const exist = await Investor.findOne({ email });
+    if (exist) {
+      res.status(400).json({ message: "email already exist" });
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log(errors.array());
       return res.status(400).json({
         errors: errors.array(),
       });
@@ -26,7 +31,7 @@ exports.registerInvestorController = async (req, res) => {
       password: hashPassword,
       phone,
       company,
-      type: 'investor'
+      type: "investor",
     });
     const savedInvestor = await newInvestor.save();
     const token = JWT.sign({ _id: savedInvestor._id }, process.env.JWT_SECRET, {
@@ -47,9 +52,15 @@ exports.registerInvestorController = async (req, res) => {
 };
 
 exports.registerStartupController = async (req, res) => {
+  const { firstName, lastName, phone, email, password, startup, category } =
+    req.body;
   try {
-    const { firstName, lastName, phone, email, password, startup, category } =
-      req.body;
+    const exist = await Startup.findOne({ email });
+    if (exist) {
+      res.status(400).json({
+        message: "email already exist",
+      });
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -66,7 +77,7 @@ exports.registerStartupController = async (req, res) => {
       phone,
       startup,
       category,
-      type: 'startupper'
+      type: "startupper",
     });
     const savedStartup = await newStartup.save();
     const token = JWT.sign({ _id: savedStartup._id }, process.env.JWT_SECRET, {
@@ -85,37 +96,41 @@ exports.registerStartupController = async (req, res) => {
     });
   }
 };
-
+//LOGIN CONTROLLER
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await Investor.findOne({ email }) || await StartupOwner.findOne({ email });
+    let user = await Investor.findOne({email})
+    let userType ='investor'
 
-  if (!user) {
-    return res
-      .status(404)
-      .json({ message: "no users were found with this email" });
+    if (!user) {
+       user = await Startup.findOne({email})
+       userType= 'startupper'
+    }
+  if(!user) {
+    res.status(404).json({message:"no users were found with this email"})
   }
 
-  const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
 
-  if (!isMatch) {
-    return res.status(400).json({
-      message: "incorrect password",
+    if (!isMatch) {
+      return res.status(400).json({
+        message: "incorrect password",
+      });
+    }
+    const token = JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: 100000,
     });
-  }
-  const token = JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: 100000,
-  });
-
-  res.status(200).json({
-    message: "user logged in successfully",
-    user : user,
-    token : token
-  });
+    res.status(200).json({
+      message: "user logged in successfully",
+      user: user,
+      token: token,
+      userType:userType,
+    });
   } catch (error) {
     console.error("Error logging in user:", error);
-    res.status(500).json({ message: "Error logging in user", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error logging in user", error: error.message });
   }
-  
 };

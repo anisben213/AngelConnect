@@ -1,0 +1,107 @@
+:root {
+  --primary-color: #f7f7f2;
+  --secondary-color: #222725;
+  --accent-color: #899878;
+  --highlight-color: #e4e6c3;
+  --title-font-size: 2.5rem;
+  --subtitle-font-size: 1.5rem;
+  --paragraph-font-size: 1rem;
+  --button-font-size: 1.5rem;
+}
+
+.login-body {
+  font-family: 'Roboto', sans-serif;
+  background-image: url("../../public/Hero-section.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.login-form {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.571);
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(128, 128, 128, 0.154);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+  width: 400px;
+  text-align: center;
+}
+
+.login-form h2 {
+  color: rgb(22, 22, 22);
+  margin-bottom: 20px;
+  font-size: var(--title-font-size);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  color: rgb(22, 22, 22);
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  background-color: transparent;
+  backdrop-filter: none;
+  padding: 10px;
+  border: 1px solid var(--secondary-color);
+  border-radius: 5px;
+  transition: border-color 0.3s;
+  font-size: var(--paragraph-font-size);
+}
+
+.form-group input:focus {
+  border-color: var(--secondary-color);
+  outline: none;
+}
+
+.error {
+  color: red;
+  font-size: var(--paragraph-font-size);
+  margin-top: 5px;
+}
+.submit-container {
+  display: block;
+  width: 300px;
+  height: 40px;
+  text-align: center;
+  margin: 0 auto;
+}
+button[type="submit"] {
+  padding: 10px;
+  width: 100%;
+  background-color: rgb(0, 227, 53);
+  color: var(--primary-color);
+  border: none;
+  border-radius: 100px;
+  font-size: var(--button-font-size);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: rgb(0, 181, 42);
+}
+
+.register-link {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.register-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}

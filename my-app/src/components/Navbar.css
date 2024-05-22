@@ -1,0 +1,94 @@
+:root {
+  --primary-color: #f7f7f2;
+  --secondary-color: #222725;
+  --accent-color: #899878;
+  --highlight-color: #e4e6c3;
+  --button-font-size: 16px;
+}
+
+body {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: transparent;
+}
+
+.navbar-scrolled {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  height:20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.nav-links {
+  cursor: pointer;
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  margin-left: 1rem;
+}
+
+.nav-link {
+  font-size: var(--button-font-size);
+  color: var(--secondary-color);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  transition: color 0.3s ease;
+  display: inline-block;
+}
+
+.nav-link:hover {
+  color: var(--accent-color);
+}
+
+.login-button {
+  font-size: var(--button-font-size);
+  background-color: var(--highlight-color);
+  color: var(--secondary-color);
+  border: none;
+  margin-right: 5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: var(--secondary-color);
+  color: var(--highlight-color);
+}
+
+.navbar-scrolled .nav-link,
+.navbar-scrolled .login-button {
+  color: var(--secondary-color);
+}
+
+.navbar-scrolled .nav-link:hover {
+  color: var(--accent-color);
+}
+
+.navbar-scrolled .login-button:hover {
+  background-color: var(---color);
+  color: var(--accent-color);
+}

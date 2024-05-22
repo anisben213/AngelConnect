@@ -1,0 +1,61 @@
+body {
+  padding: 0;
+  margin:0;
+  background-color: #f7f7f261;
+}
+.select-type-container {
+  background-color: var(--primary-color); 
+  display: flex;
+  position: absolute;
+  left: 50%;
+  top:50%;
+  transform: translate(-50%,-50%);
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 80vh;
+  width: 80%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.select-type-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  gap: 1rem;
+}
+
+.select-type-title {
+  color: var(--secondary-color);
+  font-size: 2.5rem; 
+}
+
+.select-type-button {
+  height: 40vh;
+  width: 35%;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+.investor-button {
+  background-color: var(--accent-color); 
+  color: var(--highlight-color);
+  font-size: var(--button-font-size);
+}
+
+.startupper-button {
+  background-color: var(--highlight-color);
+  color: var(--secondary-color);
+  font-size: var(--button-font-size);
+}
+
+.investor-button:hover {
+  background-color: var(--secondary-color);
+  color: var(--highlight-color);
+}
+.startupper-button:hover {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+}
