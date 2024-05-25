@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import { Link } from "react-router-dom";
 
@@ -12,9 +12,11 @@ const Login = () => {
   });
   const [errors, setErrors] = useState({});
   const [alertMessage, setAlertMessage] = useState("");
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = formData;
@@ -30,26 +32,39 @@ const Login = () => {
       setErrors(errors);
       return;
     }
+
     try {
-      const response = await axios.post("http://localhost:3001/api/login", formData);
-      if (response.data) { // Check if there's data in the response
-        if (response.data.token) {
-          const userType = response.data.userType;
-          console.log(userType);
-         if(userType==='investor'){
-          console.log(userType);
+      const response = await axios.post(
+        "http://localhost:3001/api/login",
+        formData
+      );
+      if (response.data && response.data.token && response.data.userType) {
+        console.log("response.data:", response.data);
+        const { token, userType,} = response.data;
+        let {user} = response.data
+        // Store the user informations in localStorage
+        let user_serialized= JSON.stringify(user)
+        try {
+          localStorage.setItem("user",user_serialized );
+        } catch (error) {
+          console.error("Error storing user in localStorage:", error);
+        }
+
+        // Store the token in localStorage
+        localStorage.setItem("token", token);
+
+        // Navigate to the appropriate dashboard based on userType
+        if (userType === "investor") {
           navigate("/dashboard/investor");
-         } else if(userType==='startupper'){
-          console.log("Navigating to startupper dashboard");
-          console.log(userType);
-          navigate("/dashboard/startupper")
-        } else  {
-          setAlertMessage("unexepected user type");
+        } else if (userType === "startupper") {
+          navigate("/dashboard/startupper");
+        } else {
+          setAlertMessage("Unexpected user type");
         }
       } else {
         setAlertMessage("Unexpected response from server. Please try again.");
+        console.error("Unexpected response from server:", response);
       }
-    }
     } catch (error) {
       if (
         error.response &&
@@ -58,11 +73,12 @@ const Login = () => {
       ) {
         setAlertMessage(error.response.data.message);
       } else {
+        setAlertMessage("Error during login. Please try again.");
         console.error("Error during login:", error);
       }
       setFormData({ email: "", password: "" });
     }
-  }
+  };
 
   return (
     <div className="login-body">

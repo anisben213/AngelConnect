@@ -1,10 +1,22 @@
 import React, { useEffect } from "react";
-import Navbar from "./Navbar";
+import Navbar from "../components/Navbar";
 import "aos/dist/aos.css";
 import AOS from "aos";
 import "./LandingPage.css";
+import { useNavigate } from "react-router-dom";
 
 function LandingPage() {
+  const navigate = useNavigate()
+
+  const handleStartupperCta = ()=> {
+    navigate('/signup/startupper')
+  }
+  const handleInvestorCta = () => {
+    navigate('/signup/investor')
+  }
+  const handleSignupCta = () => {
+    navigate('/signup')
+  }
   useEffect(() => {
     AOS.init({ duration: 1000 });
   }, []);
@@ -15,8 +27,8 @@ function LandingPage() {
         <h1>Welcome to AngelConnect</h1>
         <p>Connecting Investors and Startuppers</p>
         <div className="cta-buttons">
-          <button className="cta-button investor">Investor</button>
-          <button className="cta-button startupper">Startupper</button>
+          <button className="cta-button investor" onClick={handleInvestorCta}>Investor</button>
+          <button className="cta-button startupper" onClick={handleStartupperCta}>Startupper</button>
         </div>
       </section>
       <section className="about">
@@ -40,7 +52,7 @@ function LandingPage() {
           </div>
         </div>
         <div className="about-cta">
-          <button className="signup">Sign Up</button>
+          <button className="signup" onClick={handleSignupCta}>Sign Up</button>
         </div>
       </section>
       <section className="stats-section">

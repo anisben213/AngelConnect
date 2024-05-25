@@ -6,12 +6,8 @@
   --button-font-size: 16px;
 }
 
-body {
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
-}
 
-.navbar {
+.l-navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -24,7 +20,7 @@ body {
   background-color: transparent;
 }
 
-.navbar-scrolled {
+.l-navbar-scrolled {
   background-color: var(--primary-color);
   color: var(--secondary-color);
   height:20px;
@@ -37,7 +33,7 @@ body {
   cursor: pointer;
 }
 
-.nav-links {
+.l-nav-links {
   cursor: pointer;
   display: flex;
   list-style: none;
@@ -45,12 +41,12 @@ body {
   padding: 0;
 }
 
-.nav-links li {
+.l-nav-links li {
   margin-left: 1rem;
 }
 
-.nav-link {
-  font-size: var(--button-font-size);
+.l-nav-link {
+  font-size: 16px;
   color: var(--secondary-color);
   text-decoration: none;
   padding: 0.5rem 1rem;
@@ -58,12 +54,12 @@ body {
   display: inline-block;
 }
 
-.nav-link:hover {
+.l-nav-link:hover {
   color: var(--accent-color);
 }
 
-.login-button {
-  font-size: var(--button-font-size);
+.l-login-button {
+  font-size: 16px;
   background-color: var(--highlight-color);
   color: var(--secondary-color);
   border: none;
@@ -74,21 +70,21 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.login-button:hover {
+.l-login-button:hover {
   background-color: var(--secondary-color);
   color: var(--highlight-color);
 }
 
-.navbar-scrolled .nav-link,
-.navbar-scrolled .login-button {
+.l-navbar-scrolled .l-nav-link,
+.l-navbar-scrolled .l-login-button {
   color: var(--secondary-color);
 }
 
-.navbar-scrolled .nav-link:hover {
+.l-navbar-scrolled .l-nav-link:hover {
   color: var(--accent-color);
 }
 
-.navbar-scrolled .login-button:hover {
-  background-color: var(---color);
+.l-navbar-scrolled .l-login-button:hover {
+  background-color: var(--secondary-color);
   color: var(--accent-color);
 }

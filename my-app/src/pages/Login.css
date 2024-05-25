@@ -53,7 +53,7 @@
   background-color: transparent;
   backdrop-filter: none;
   padding: 10px;
-  border: 1px solid var(--secondary-color);
+  border: 1px solid rgb(76, 76, 76);
   border-radius: 5px;
   transition: border-color 0.3s;
   font-size: var(--paragraph-font-size);

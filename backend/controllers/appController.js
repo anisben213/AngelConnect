@@ -1,34 +1,42 @@
 const express = require("express");
-const router = express.Router();
-const { verifyToken } = require("../middlewares/verify");
 const Investor = require("../models/businessAngel");
 const Startup = require("../models/startupOwner");
+const { validationResult } = require("express-validator");
+const bcrypt = require("bcryptjs");
 
+// Get all startuppers with pagination
 exports.getStartuppers = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-  const filter = req.query.filter || {};
-
   try {
-    const startuppers = await Startup.find(filter)
+    const startuppers = await Startup.find()
       .skip((page - 1) * limit)
       .limit(limit);
+    const totalCount = await Startup.countDocuments();
+
+    // Set response headers for pagination
+    res.set("x-total-pages", Math.ceil(totalCount / limit));
+    res.set('Access-Control-Expose-Headers', 'x-total-pages');
     res.json(startuppers);
   } catch (error) {
-    console.error("Error fetching startuppers:", error);
+    console.error("Error fetching startuppers :", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
+// Get all investors with pagination
 exports.getInvestors = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-  const filter = req.query.filter || {};
-
   try {
-    const investors = await Investor.find(filter)
+    const investors = await Investor.find()
       .skip((page - 1) * limit)
       .limit(limit);
+    const totalCount = await Investor.countDocuments();
+
+    // Set response headers for pagination
+    res.set("x-total-pages", Math.ceil(totalCount / limit));
+    res.set('Access-Control-Expose-Headers', 'x-total-pages');
     res.json(investors);
   } catch (error) {
     console.error("Error fetching investors :", error);
@@ -36,6 +44,7 @@ exports.getInvestors = async (req, res) => {
   }
 };
 
+// Update user profile
 exports.updateProfile = async (req, res) => {
   try {
     const { firstName, lastName, email, password, phone } = req.body;
@@ -44,48 +53,31 @@ exports.updateProfile = async (req, res) => {
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+    const userId = req.params.userId;
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
 
-    const userId = req.user._id;
-    let user =
-      (await Investor.findById(userId)) || (await Startup.findById(userId));
+    // Find user by ID
+    let user = await Investor.findById(userId) || await Startup.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.email = email;
-    user.phone = phone;
+    const updateData = { firstName, lastName, email, phone, password };
 
+    // Hash password before updating
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
-      user.password = hashedPassword;
+      updateData.password = hashedPassword;
     }
-    await user.save();
+
+    // Update user profile
+    user = await Startup.findByIdAndUpdate(userId, updateData, { new: true });
 
     res.status(200).json({ message: "Profile updated successfully", user });
   } catch (error) {
     console.error("Error updating profile:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-exports.getUserDetails = async (req, res) => {
-  try {
-    const userId = req.params.userId;
-
-    const user = await Promise.any([
-      Investor.findById(userId),
-      Startup.findById(userId),
-    ]);
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.status(200).json({ user });
-  } catch (error) {
-    console.error("Error fetching user details:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

@@ -95,7 +95,8 @@
   border-radius: 8px;
 }
 .about-item:nth-child(1) {
-  align-self: flex-start; 
+  align-self: flex-start;
+  padding: 8px; 
 }
 
 .about-item:nth-child(2) {

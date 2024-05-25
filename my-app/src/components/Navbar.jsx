@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import './Navbar.css';
-import {Link} from 'react-scroll'
+import React, { useState, useEffect } from "react";
+import "./Navbar.css";
+import { Link } from "react-scroll";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const handleLoginClick = () => {
+    navigate("/login");
+  };
   const [scroll, setScroll] = useState(false);
 
   useEffect(() => {
@@ -14,31 +19,33 @@ const Navbar = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   return (
-    <nav className={`navbar ${scroll ? 'navbar-scrolled' : ''}`}>
+    <nav className={`l-navbar ${scroll ? "l-navbar-scrolled" : ""}`}>
       <Link to="hero" smooth={true} duration={500} className="logo">
-            AngelConnect
-          </Link>
-      <ul className="nav-links">
+        AngelConnect
+      </Link>
+      <ul className="l-nav-links">
         <li>
-          <Link to="hero" smooth={true} duration={500} className="nav-link">
+          <Link to="hero" smooth={true} duration={500} className="l-nav-link">
             Home
           </Link>
         </li>
         <li>
-          <Link to="about" smooth={true} duration={500} className="nav-link">
+          <Link to="about" smooth={true} duration={500} className="l-nav-link">
             About Us
           </Link>
         </li>
       </ul>
-      <button className="login-button">Connexion</button>
+      <button className="l-login-button" onClick={handleLoginClick}>
+        Connexion
+      </button>
     </nav>
   );
 };
