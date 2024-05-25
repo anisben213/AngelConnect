@@ -8,6 +8,7 @@ const app = express();  // Initialize Express application
 const signRoutes = require("./routes/registerRoutes");  // Import routes for registration
 const userRoutes = require("./routes/appRoutes");  // Import routes for user actions
 const cors = require("cors");  // Middleware for enabling Cross-Origin Resource Sharing (CORS)
+const path = require('path')
 
 // Middleware to parse incoming JSON requests
 app.use(express.json());
@@ -19,7 +20,10 @@ app.use(
     exposedHeaders: ['x-total-pages']  // Expose custom headers
   })
 );
-
+app.use(express.static(path.join(__dirname,"build")));
+app.get("/",(req,res)=>{
+  res.sendFile(path.join(__dirname,"build/index.html"))
+})
 // Register routes for sign-up and authentication related requests
 app.use("/api", signRoutes);
 
